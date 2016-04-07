@@ -1,0 +1,26 @@
+{
+  "name": "dev-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "function-programming-examples.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpg1218/dev-playground.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jpg1218/dev-playground/issues"
+  },
+  "homepage": "https://github.com/jpg1218/dev-playground#readme",
+  "dependencies": {
+    "lodash": "^4.8.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.7.4"
+  }
+}

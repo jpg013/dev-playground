@@ -76,6 +76,37 @@ var getInitials = map(function(name) {
 
 console.log(getInitials(names));
 
+// Exercise 2
+//==============
+// Refactor to remove all arguments by partially applying the functions.
+
+var filterQs = function(xs) {
+  return _.filter(function(x) {
+    return match(/q/i, x);
+  }, xs);
+};
+
+// Exercise 2 Solution
+//==============
+var match = function(x) {
+    return function(str) {
+        return str.match(x);
+    };
+};
+
+var arrFilter = function(predicate) {
+    return function(arr) {
+        return _.filter(arr, predicate);
+    };
+};
+
+// put it all together
+var findQ = match(/q/i);
+var filterOnQ = arrFilter(findQ);
+var arr = ['q here', 'not here'];
+console.log(filterOnQ(arr));
+
+
 /**
   * Chapter 5 Examples
   **/
@@ -86,7 +117,6 @@ var compose = function(f, g) {
         return f(g(x));
     };
 };
-
 
 /**
   * Chapter 5 Exercises
@@ -124,7 +154,6 @@ var CARS = [{
   dollar_value: 1300000,
   in_stock: false,
 }];
-
 
 // Exercise 1:
 // ============

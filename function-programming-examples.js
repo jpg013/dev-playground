@@ -146,6 +146,15 @@ var slice = (start, end, arr)=> ()=> arr.slice(start, end);
 var sliceExample = slice(0,2,[0,1,2]);
 console.log(sliceExample());
 
+// Bonus 2:
+// ============
+// Use slice to define a function "take" that takes n elements from the beginning of the string. Make it curried.
+// // Result for "Something" with n=4 should be "Some"
+var take = undefined;
+
+var take = slice(0,4,'Something');
+console.log(take());
+
 /**
   * Chapter 5 Examples
   **/

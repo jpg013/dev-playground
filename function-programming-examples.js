@@ -125,16 +125,26 @@ var max = function(xs) {
 
 // Exercise 3 Solution
 //==============
-var reduce = function(reducer, init) {
-    return function(arr) {
-        return _.reduce(arr, reducer, init);
-    };
-};
-
+var reduce = (reducer, init)=> (arr)=> _.reduce(arr, reducer, init);
 var max = reduce(_keepHighest, -Infinity);
 var numbers = [1, 2, 6, 4, 885, 732];
 
 console.log(max(numbers));
+
+
+// Bonus 1:
+// ============
+// Wrap array's slice to be functional and curried.
+// //[1, 2, 3].slice(0, 2)
+var slice = undefined;
+
+// Bonus 1 Solution:
+// =================
+
+var slice = (start, end, arr)=> ()=> arr.slice(start, end);
+
+var sliceExample = slice(0,2,[0,1,2]);
+console.log(sliceExample());
 
 /**
   * Chapter 5 Examples

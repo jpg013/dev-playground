@@ -106,6 +106,35 @@ var filterOnQ = arrFilter(findQ);
 var arr = ['q here', 'not here'];
 console.log(filterOnQ(arr));
 
+// Exercise 3
+//==============
+// Use the helper function _keepHighest to refactor max to not reference any
+// arguments.
+
+// LEAVE BE:
+var _keepHighest = function(x, y) {
+  return x >= y ? x : y;
+};
+
+// REFACTOR THIS ONE:
+var max = function(xs) {
+  return _.reduce(function(acc, x) {
+    return _keepHighest(acc, x);
+  }, -Infinity, xs);
+};
+
+// Exercise 3 Solution
+//==============
+var reduce = function(reducer, init) {
+    return function(arr) {
+        return _.reduce(arr, reducer, init);
+    };
+};
+
+var max = reduce(_keepHighest, -Infinity);
+var numbers = [1, 2, 6, 4, 885, 732];
+
+console.log(max(numbers));
 
 /**
   * Chapter 5 Examples

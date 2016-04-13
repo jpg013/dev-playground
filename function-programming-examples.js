@@ -248,3 +248,33 @@ var head = function(arr) {
 
 nameOfFirstCar = compose(carName, head);
 console.log(nameOfFirstCar(CARS)); //Ferrari FF
+
+// Exercise 3:
+// ============
+// Use the helper function _average to refactor averageDollarValue as a composition.
+var _average = function(xs) {
+  var sum = _.reduce(xs, (sum, n)=>sum+n, 0);
+  return sum / xs.length;
+}; // <- leave be
+
+var averageDollarValue = function(cars) {
+  var dollar_values = _.map(function(c) {
+    return c.dollar_value;
+  }, cars);
+  return _average(dollar_values);
+};
+
+// Exercise 3 Solution:
+// ======================
+var dollarValue = prop('dollar_value');
+
+var mapProp = function(predicate) {
+    return function (arr) {
+        return arr.map(predicate);
+    };
+};
+
+var mapAverageDollarValues = mapProp(dollarValue);
+averageDollarValue = compose(_average, mapAverageDollarValues);
+console.log(mapAverageDollarValues(CARS)); //[ 700000, 648000, 132000, 114200, 1850000, 1300000 ]
+console.log(averageDollarValue(CARS));

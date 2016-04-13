@@ -230,3 +230,21 @@ var inStock = prop('in_stock');
 var isLastInStock = compose(inStock, _.last);
 console.log(isLastInStock(CARS)); // false
 console.log(isLastInStock(_.reverse(CARS))); // true
+// undo rever
+_.reverse(CARS);
+
+// Exercise 2:
+// ============
+// Use _.compose(), _.prop() and _.head() to retrieve the name of the first car.
+var nameOfFirstCar;
+
+// Exercise 2 Solution:
+// ============
+var carName = prop('name');
+var head = function(arr) {
+    console.log(arr[0]);
+    return arr[0];
+};
+
+nameOfFirstCar = compose(carName, head);
+console.log(nameOfFirstCar(CARS)); //Ferrari FF

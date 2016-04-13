@@ -213,3 +213,20 @@ var isLastInStock = function(cars) {
 
 // Exercise 1 Solution:
 // ====================
+var compose = function(g, h) {
+    return function(x) {
+        return g(h(x));
+    };
+};
+
+// Curry prop
+var prop = function(key) {
+    return function(obj) {
+        return obj[key];
+    };
+};
+
+var inStock = prop('in_stock');
+var isLastInStock = compose(inStock, _.last);
+console.log(isLastInStock(CARS)); // false
+console.log(isLastInStock(_.reverse(CARS))); // true

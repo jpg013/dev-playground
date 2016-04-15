@@ -313,3 +313,41 @@ var mapUnderscore = mapProp(underscore);
 
 sanitizeNames = compose(mapLowerCase, compose(mapUnderscore, mapNames));
 sanitizeNames(CARS); //[ 'ferrari_ff','spyker_c12_zagato','jaguar_xkr_s','audi_r8','aston_martin_one_77','pagani_huayra' ]
+
+// Bonus 1:
+// ============
+// Refactor availablePrices with compose.
+
+var availablePrices = function(cars) {
+  var available_cars = _.filter(_.prop('in_stock'), cars);
+  return available_cars.map(function(x) {
+    return accounting.formatMoney(x.dollar_value);
+  }).join(', ');
+};
+
+// Bonus 1 Solution:
+// ============
+
+var formatMoney = function(value) {
+    return '$' + value;
+};
+
+var filterArr = function(predicate) {
+    return function(arr) {
+        arr.filter(predicate);
+    };
+};
+
+var arrToString = function(delimiter) {
+    return function(arr) {
+        return arr.join(delimiter);
+    };
+};
+
+var toCommaString = arrToString(', ');
+var filterInStock = filter(prop('in_stock'));
+var mapDollarValue = mapProp(prop('dollar_value'));
+var mapFormatMoney = mapProp(formatMoney);
+var availablePrices = compose(toCommaString, compose(mapFormatMoney, compose(mapDollarValue, filterInStock)));
+
+availablePrices(CARS); // $700000, $1850000

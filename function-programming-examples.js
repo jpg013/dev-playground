@@ -10,22 +10,22 @@ var add = (x) => (y) => x + y;
 var increment = add(1);
 var addTen = add(10);
 
-console.log(increment(4)); // 5
-console.log(addTen(10)); // 20
+increment(4); // 5
+addTen(10); // 20
 
 var match = curry((what, str)=>str.match(what));
 var replace = curry((what, replacement, str)=>str.replace(what,replacement));
 var filter = curry((f, ary)=>ary.filter(f));
 var map = curry((f, ary)=>ary.map(f));
 
-console.log(match(/\s+/g, 'hello world'));
-console.log(match(/\s+/g)('hello world'));
+match(/\s+/g, 'hello world'); // [' ']
+match(/\s+/g)('hello world'); // [' ']
 
 var hasSpaces = match(/\s+/g);
-console.log(hasSpaces('hello world'));
-console.log(hasSpaces('spaceless'));
+hasSpaces('hello world'); // [' ']
+hasSpaces('spaceless'); // null
 
-console.log(filter(hasSpaces, ['tori_spelling', 'tori amos']));
+filter(hasSpaces, ['tori_spelling', 'tori amos']); // ['tori amos']
 
 
 /**
@@ -44,7 +44,7 @@ var words = function(str) {
 //==============
 var split = curry((separator, str)=>_.split(str, separator));
 var splitOnSpace = split(' ');
-console.log(splitOnSpace('hello world'));
+splitOnSpace('hello world'); // ['hello', 'world']
 
 var split = function(separator) {
     return function(str) {
@@ -53,7 +53,7 @@ var split = function(separator) {
 };
 
 var splitOnSpace = split(' ');
-console.log(splitOnSpace('hello world'));
+splitOnSpace('hello world'); //  ['hello', 'world' ]
 
 // Exercise 1a
 //==============
@@ -74,7 +74,7 @@ var getInitials = map(function(name) {
           ].join(' ');
 });
 
-console.log(getInitials(names));
+getInitials(names); // [ 'J. P. G.', 'N. S. D.' ]
 
 // Exercise 2
 //==============
@@ -104,7 +104,7 @@ var arrFilter = function(predicate) {
 var findQ = match(/q/i);
 var filterOnQ = arrFilter(findQ);
 var arr = ['q here', 'not here'];
-console.log(filterOnQ(arr));
+filterOnQ(arr); // [ 'q here' ]
 
 // Exercise 3
 //==============
@@ -129,7 +129,7 @@ var reduce = (reducer, init)=> (arr)=> _.reduce(arr, reducer, init);
 var max = reduce(_keepHighest, -Infinity);
 var numbers = [1, 2, 6, 4, 885, 732];
 
-console.log(max(numbers));
+max(numbers); //885
 
 
 // Bonus 1:
@@ -144,7 +144,7 @@ var slice = undefined;
 var slice = (start, end, arr)=> ()=> arr.slice(start, end);
 
 var sliceExample = slice(0,2,[0,1,2]);
-console.log(sliceExample());
+sliceExample(); // [0, 1]
 
 // Bonus 2:
 // ============
@@ -153,7 +153,7 @@ console.log(sliceExample());
 var take = undefined;
 
 var take = slice(0,4,'Something');
-console.log(take());
+take(); //Some
 
 /**
   * Chapter 5 Examples
@@ -228,8 +228,8 @@ var prop = function(key) {
 
 var inStock = prop('in_stock');
 var isLastInStock = compose(inStock, _.last);
-console.log(isLastInStock(CARS)); // false
-console.log(isLastInStock(_.reverse(CARS))); // true
+isLastInStock(CARS); // false
+isLastInStock(_.reverse(CARS)); // true
 // undo rever
 _.reverse(CARS);
 
@@ -242,12 +242,11 @@ var nameOfFirstCar;
 // ============
 var carName = prop('name');
 var head = function(arr) {
-    console.log(arr[0]);
     return arr[0];
 };
 
 nameOfFirstCar = compose(carName, head);
-console.log(nameOfFirstCar(CARS)); //Ferrari FF
+nameOfFirstCar(CARS); //Ferrari FF
 
 // Exercise 3:
 // ============
@@ -276,5 +275,41 @@ var mapProp = function(predicate) {
 
 var mapAverageDollarValues = mapProp(dollarValue);
 averageDollarValue = compose(_average, mapAverageDollarValues);
-console.log(mapAverageDollarValues(CARS)); //[ 700000, 648000, 132000, 114200, 1850000, 1300000 ]
-console.log(averageDollarValue(CARS));
+mapAverageDollarValues(CARS); //[ 700000, 648000, 132000, 114200, 1850000, 1300000 ]
+averageDollarValue(CARS); //790700
+
+// Exercise 4:
+// ============
+// Write a function: sanitizeNames() using compose that returns a list of lowercase and underscored car's names: e.g: sanitizeNames([{name: 'Ferrari FF', horsepower: 660, dollar_value: 700000, in_stock: true}]) //=> ['ferrari_ff'].
+
+// Exercise 4 Solution:
+// ============
+
+// Just for fun, here is how I would have written this method not using composition
+var sanitizeNames = CARS.map(function(car) {
+    return _.replace(car.name, /\W+/g, '_').toLowerCase();
+});
+
+// Replace Wrapper
+replace = function replace(pattern, replacement) {
+    return function(string) {
+        return _.replace(string, pattern, replacement);
+    };
+};
+
+// underscore wraper
+var underscore = replace(/\W+/g, '_');
+
+// To Lower case wrapper
+var toLowerCase = function(string) {
+    return String.prototype.toLowerCase.apply(string);
+};
+
+
+// Map functors
+var mapNames = mapProp(prop('name'));
+var mapLowerCase = mapProp(toLowerCase);
+var mapUnderscore = mapProp(underscore);
+
+sanitizeNames = compose(mapLowerCase, compose(mapUnderscore, mapNames));
+sanitizeNames(CARS); //[ 'ferrari_ff','spyker_c12_zagato','jaguar_xkr_s','audi_r8','aston_martin_one_77','pagani_huayra' ]
